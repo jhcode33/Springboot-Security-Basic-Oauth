@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jhcode33.security.model.User;
-import com.jhcode33.security.repository.UserReposiroty;
+import com.jhcode33.security.repository.UserRepository;
 
 @Controller
 public class IndexController {
 	
 	@Autowired
-	private UserReposiroty userReposiroty;
+	private UserRepository userReposiroty;
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;

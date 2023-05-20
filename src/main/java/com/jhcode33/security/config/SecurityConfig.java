@@ -26,6 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.anyRequest().permitAll()
 			.and()
 			.formLogin()
-			.loginPage("/loginForm");
+			.loginPage("/loginForm")
+			.loginProcessingUrl("/login") // /login URL이 호출이 되면 Security가 중간에 개입해서 로그인을 진행해줍니다, Controller에 /login 부분을 구성하지 않아도 됩니다.
+			.defaultSuccessUrl("/"); //로그인 페이지로 설정한 /loginForm에서 로그인을 진행하면 인덱스페이지로 돌아가지만 특정 URL에서 권한이 필요해서 로그인을 수행하면, 특정 URL로 다시 돌아감, 디폴드로 돌아가는 것이 아님.
 	}
 }
