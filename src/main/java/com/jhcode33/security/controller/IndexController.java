@@ -1,11 +1,23 @@
 package com.jhcode33.security.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.jhcode33.security.model.User;
+import com.jhcode33.security.repository.UserReposiroty;
 
 @Controller
 public class IndexController {
+	
+	@Autowired
+	private UserReposiroty userReposiroty;
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	// "", / URL으로 들어온 모든 요청을 index View로 요청합니다.
 	@GetMapping({"","/"})
@@ -31,18 +43,27 @@ public class IndexController {
 		return "manager";
 	}
 	
-	@GetMapping("/login")
-	public @ResponseBody String login() {
-		return "login";
+	//== 로그인 ==//
+	@GetMapping("/loginForm")
+	public String loginForm() {
+		return "loginForm";
 	}
 	
-	@GetMapping("/join")
-	public @ResponseBody String join() {
-		return "회원가입 완료됨!";
+	//== 회원가입 ==//
+	@GetMapping("/joinForm")
+	public String joinForm() {
+		return "joinForm";
 	}
 	
-	@GetMapping("/joinProc")
-	public @ResponseBody String joinProc() {
-		return "joinProc";
+	@PostMapping("/join")
+	public String join(User user) {
+		System.out.println(user);
+		user.setRole("ROLE_USER");
+		String rawPassword = user.getPassword();
+		String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+		user.setPassword(encPassword);
+		userReposiroty.save(user); //이렇게 회원가입하면 비빌번호가 그대로 DB에 저장되어, Security로 로그인할 수 없다. Security는 패스워드 암호화를 해주어야 한다.
+		return "redirect:/loginForm"; //redircet: 해당 URL로 재요청함.
 	}
+
 }
