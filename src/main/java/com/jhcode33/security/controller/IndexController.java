@@ -1,6 +1,8 @@
 package com.jhcode33.security.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,5 +67,17 @@ public class IndexController {
 		userReposiroty.save(user); //이렇게 회원가입하면 비빌번호가 그대로 DB에 저장되어, Security로 로그인할 수 없다. Security는 패스워드 암호화를 해주어야 한다.
 		return "redirect:/loginForm"; //redircet: 해당 URL로 재요청함.
 	}
-
+	
+	@Secured("ROLE_ADMIN")
+	@GetMapping("/info")
+	public @ResponseBody String info() {
+		return "개인정보";
+	}
+	
+	// data()메소드가 실행되기 직전에 발생됨.
+	@PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+	@GetMapping("/data")
+	public @ResponseBody String data() {
+		return "개인정보";
+	}
 }
