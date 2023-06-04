@@ -31,3 +31,17 @@ spring:
         "[hbm2ddl.auto]": update
     open-in-view: false
     show-sql: true
+
+    
+  #Spring OAuth
+  security:
+    oauth2:
+     client:
+      registration:
+       google:
+        client-id: 1013147133735-j01tfa0ai92ui0cdlbfl0shquj5b09qk.apps.googleusercontent.com
+        client-secret: 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
+        scope:
+        - email
+        - profile
+          

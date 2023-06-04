@@ -23,6 +23,10 @@ public class User {
 	private String email;
 	private String role; // ROLE_USER, ROLE_ADMIN
 	
+	//OAuth 회원인지 확인하기 위해서
+	private String provider;
+	private String providerId;
+	
 	@CreationTimestamp
 	private Timestamp createDate;
 }
