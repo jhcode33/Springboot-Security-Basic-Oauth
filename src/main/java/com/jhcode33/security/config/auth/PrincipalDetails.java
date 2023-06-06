@@ -2,9 +2,11 @@ package com.jhcode33.security.config.auth;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.jhcode33.security.model.User;
 
@@ -19,12 +21,20 @@ import com.jhcode33.security.model.User;
 //Security Session은 Authentication 객체를 사용해야하고
 //Authentication 객체는 User 정보를 UserDetails 타입의 객체로 저장해야함.
 
-public class PrincipalDetails implements UserDetails {
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
 	private User user; // User 객체를 주입받음, 생성자를 통해서
+	private Map<String, Object> attributes;
 
+	//일반 로그인할 때 사용하는 객체
 	public PrincipalDetails(User user) {
 		this.user = user;
+	}
+	
+	//생성자 오버로딩, OAuth 로그인할 때 사용하는 객체
+	public PrincipalDetails(User user, Map<String, Object> attributes) {
+		this.user = user;
+		this.attributes = attributes;
 	}
 
 	// 해당 User의 권한을 리턴하는 메소드임
@@ -82,5 +92,24 @@ public class PrincipalDetails implements UserDetails {
 		
 		return true;
 	}
+
+	//OAuth2
+	@Override
+	public <A> A getAttribute(String name) {
+		// TODO Auto-generated method stub
+		return OAuth2User.super.getAttribute(name);
+	}
+
+	@Override
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
+	
+	//이건 안 써서 null로 함.
+	@Override
+	public String getName() {
+		return null;
+	}
+	
 
 }
