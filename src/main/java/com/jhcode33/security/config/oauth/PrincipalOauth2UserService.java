@@ -3,6 +3,7 @@ package com.jhcode33.security.config.oauth;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -22,6 +23,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	//구글로부터 받은 userRequest 데이터에 대해서 후처리 되는 메소드
 	//OAuth2UserRequest는 AccessToken과 User 데이터가 모두 담긴 객체임.
@@ -74,7 +78,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 			
 		} else if(userRequest.getClientRegistration().getRegistrationId().equals("naver")){
 			System.out.println("네이버 로그인을 진행합니다.");
-			oAuth2UserInfo = new NaverUserInfo((Map)oauth2User.getAttributes().get("response"));
+			oAuth2UserInfo = new NaverUserInfo((Map<String, Object>) oauth2User.getAttributes().get("response"));
 			
 		} else {
 			System.out.println("현재는 구글과 페이스북과 네이버만 지원합니다.");
